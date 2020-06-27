@@ -1,0 +1,9 @@
+var x = 4;
+var y = 2;
+function sum(x, y) {
+    function inner(x, y) {
+        return x * y;
+    }
+    return inner(x - 1, y)+inner(x, y+1);
+}
+var z = sum(2, 2);

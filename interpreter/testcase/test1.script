@@ -1,0 +1,8 @@
+var x = 4;
+function sum(x) {
+    function inner(x) {
+        return x * 2;
+    }
+    return inner(x)+inner(x+10);
+}
+var z = sum(x);
