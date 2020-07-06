@@ -164,13 +164,11 @@ class ParentAstToken : public PreAndInfixAstToken {
     AstToken* led(AstToken* left) {
         assert(left->peek_type() == IDENTIFIER);
         child_list.push_back(left);
-        for (AstToken *token = parser_instance.get_current_token();
-            token->peek_value() != ")";) {
+        while (parser_instance.peek_current_value() != ")") {
             child_list.push_back(parser_instance.expression(0));
-            if (parser_instance.get_current_token()->peek_value() == ")")
+            if (parser_instance.peek_current_value() == ")")
                 break;
             parser_instance.advance(",");
-            token = parser_instance.get_current_token();
         }
         parser_instance.advance(")");
         this->set_type(FUNCTION);

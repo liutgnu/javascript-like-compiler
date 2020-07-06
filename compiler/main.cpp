@@ -53,5 +53,6 @@ int main(int argc, char **argv)
     assembler.do_assemble();
     assembler.print_instruction_buf();
 
+    free(buf);
     return 0;
 }
