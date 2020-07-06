@@ -27,7 +27,6 @@ simple_lexser::token_type Parser::peek_current_type() {
 }
 
 AstToken *Parser::get_current_token() {
-    cout << "\" " << lexser.get_token_by_index(current_lex_index).value << " \"" << endl;
     return TokenConventor::convert(lexser.get_token_by_index(current_lex_index), *this);
 }
 
@@ -125,7 +124,6 @@ void Parser::delete_tree(AstToken* root) {
         delete_tree(*it);
         it = root->child_list.erase(it);
     }
-    cout <<  "< " << root->peek_value() << " >" << endl;
     delete(root);
     root = nullptr;
 }

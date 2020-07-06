@@ -31,5 +31,7 @@ int main(int argc, char **argv)
 
     simple_interpreter::Interpreter interpreter(parser);
     interpreter.interprete();
+
+    free(buf);
     return 0;
 }
