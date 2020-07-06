@@ -22,7 +22,12 @@ std::string Parser::peek_current_value() {
     return lexser.get_token_by_index(current_lex_index).value;
 }
 
+simple_lexser::token_type Parser::peek_current_type() {
+    return lexser.get_token_by_index(current_lex_index).type;    
+}
+
 AstToken *Parser::get_current_token() {
+    cout << "\" " << lexser.get_token_by_index(current_lex_index).value << " \"" << endl;
     return TokenConventor::convert(lexser.get_token_by_index(current_lex_index), *this);
 }
 
@@ -30,13 +35,15 @@ AstToken *Parser::expression(int bp) {
     AstToken *token = get_current_token();
     advance();
     AstToken *left = token->nud();
-    for (AstToken *current_token = get_current_token();
+    AstToken *current_token;
+    for (current_token = get_current_token();
         bp < dynamic_cast<InfixAstToken *>(current_token) ->bp;) {
         token = current_token;
         advance();
         left = token->led(left);
         current_token = get_current_token();
     }
+    delete(current_token);
     return left;
 }
 
@@ -58,8 +65,7 @@ AstToken *Parser::statements() {
     messager.type = STATEMENTS;
     AstToken *statements_token = new AstToken(messager, *this);
     while (true) {
-        AstToken *token = get_current_token();
-        if (token->peek_value() == "}" || token->peek_type() == END) {
+        if (peek_current_value() == "}" || peek_current_type() == simple_lexser::END) {
             break;
         }
         AstToken *s = statement();
@@ -107,6 +113,21 @@ void Parser::parse() {
 void Parser::parse_expression() {
     this->ast_tree_root = expression(0);
     simple_parser::AstTreeViewer(this->ast_tree_root).view();
+}
+
+Parser::~Parser() {
+    delete_tree(ast_tree_root);
+}
+
+void Parser::delete_tree(AstToken* root) {
+    for (vector<AstToken *>::iterator it = root->child_list.begin();
+        it != root->child_list.end();) {
+        delete_tree(*it);
+        it = root->child_list.erase(it);
+    }
+    cout <<  "< " << root->peek_value() << " >" << endl;
+    delete(root);
+    root = nullptr;
 }
 
 }

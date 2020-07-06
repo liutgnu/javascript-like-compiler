@@ -30,4 +30,6 @@ int32_t main(int argc, char **argv)
     it != lexser.token_list.end(); ++it) {
         it->to_string();
     }
+    free(buf);
+    return 0;
 }
